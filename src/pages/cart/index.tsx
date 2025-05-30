@@ -1,38 +1,58 @@
+import { Link } from "react-router-dom"
+
+import { useContext } from "react"
+
+import { CartContext } from "../../contexts/CartContext"
 
 export function Cart(){
+const {cart,total,removeItemCart,addItemCart} = useContext(CartContext)
+
     return(
 
       <div className="px-4 w-full max-w-7xl mx-auto">
         <h1 className="font-medium text-2xl text-center my-4">Carrinho de compras</h1>
      
-  <section className="flex items-center justify-between border-b-2 border-gray-300">
+{cart.length === 0 && (
+  <div className="flex flex-col items-center justify-center h-screen gap-4">
+    <strong className="text-2xl flex items-center justify-center "> Seu carrinho está vazio.. </strong>
+    <Link className="text-blue-700 inline-block items-center justify-center text border-b-2 " to="/">Acessar produtos </Link>
+  </div>
+)}
 
-<img className="w-28 " 
- src="https://www.bing.com/images/search?q=imagem+fone&id=03BC7778D6DEBFDF0E63C74CF37347293C16991B&FORM=IACFIR" alt="logo" />
+ {cart.map((item)=>(
+   <section key={item.id}
+    className="flex items-center justify-between border-b-2 border-gray-300">
 
-<strong>preco: R$1000</strong>
+<img className="w-28"
+ src={item.cover} alt={item.title} />
+
+<strong>preco: {item.price}</strong>
 
 <div className="flex items-center justify-center gap-3">
-  <button className="bg-slate-600 px-2 rounded text-white font-medium flex items-center justify-center">
+  <button onClick={()=> removeItemCart(item)} className="bg-slate-600 px-2 rounded text-white font-medium flex items-center justify-center">
     -
   </button>
 
-2
+{item.amount}
 
-   <button className="bg-slate-600 px-2 rounded text-white font-medium flex items-center justify-center">
+   <button onClick={ ()=> addItemCart(item) } className="bg-slate-600 px-2 rounded text-white font-medium flex items-center justify-center">
     +
   </button>
 
 </div>
 
 <strong className="float-right">
-  SubTototal: R$1.000
+  SubTototal: {item.total.toLocaleString("pt-BR",{
+    style:"currency",
+    currency:"BRL"
+  })}
 </strong>
 
   </section>
+ ))}
 
-  <p className="font-bold mt-4"> Total: R$1.000</p>
-
+  {cart.length !== 0 && (
+    <p className="font-bold mt-4"> Total: {total} </p> )}
       </div>  
     )
 }

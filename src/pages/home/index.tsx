@@ -1,10 +1,11 @@
 import { useEffect,useState,useContext } from "react"
 import { BsCartPlus } from "react-icons/bs"
 
+import { Link } from "react-router-dom";
 import { api } from "../../services/api"
 import { CartContext } from "../../contexts/CartContext";
 
-
+import toast from "react-hot-toast";
 
 export interface ProductsProps{
     id:number;
@@ -31,7 +32,9 @@ getProducts();
 },[])
 
 function handleAddCartItem(product:ProductsProps){
-addItemCart(product)
+toast.success("Produto adicionado ao carrinho",{style:{borderRadius:10,backgroundColor:"green",color:"white"}})
+    addItemCart(product)
+
 }
 
     return(
@@ -45,8 +48,10 @@ addItemCart(product)
             <section key={product.id}
              className="w-full">
 
+   <Link to={`/products/${product.id}`}>
     <img className="w-full rounded-lg max-h-72 mb-2"
     src={product.cover} alt={product.title} />
+   </Link>
     <p className="font-medium mt-1 mb-2"> {product.title} </p>
 
     <div className="flex gap-3 items-center">
